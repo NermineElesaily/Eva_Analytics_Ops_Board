@@ -48,7 +48,7 @@
             background: #facc15;
         }
     </style>
-</head> 
+</head>
 <body class="bg-navyDark text-textWhite min-h-screen flex flex-col overflow-x-hidden font-sans">
 
     <header class="bg-navyCard border-b border-navyBorder px-6 py-4 flex flex-col lg:flex-row justify-between items-center gap-4 z-10">
@@ -439,7 +439,6 @@
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Constants and State Variables
-        const appId = 'eva-mrna-ops-board-state';
         const samplePillars = ["1. RVFV", "6. PSDA Polymer", "7. LNP Development", "13. Analytics", "14. ELN & PM", "15. People", "18. Vaccine TT"];
         const sampleDataset = [
             { id: 1, pillar: "1. RVFV", member: "Nermine", milestone: "April", task: "Review EDA comments on RVFV file and draft response plan before deadline", status: "Overdue", comments: "Awaiting final analytical validation parameters.", archived: false, featured: true },
@@ -464,7 +463,6 @@
 
         const firebaseConfig = {
             apiKey: "AIzaSyBLzP_WMEeCM1fKL7nOK_yuGiKJQPThLW4",
-            databaseURL: "https://operations-board-875e9.firebaseio.com",
             authDomain: "operations-board-875e9.firebaseapp.com",
             projectId: "operations-board-875e9",
             storageBucket: "operations-board-875e9.firebasestorage.app",
@@ -485,7 +483,10 @@
 
                 const credentials = await signInAnonymously(auth);
                 if (credentials.user) {
+                    // Correct structural format matching your Firebase Console
                     const docRef = doc(db, 'pillars', 'dashboardState');
+                    
+                    // Fixed v11 Snapshot listener logic providing the incoming Real-Time read channels
                     onSnapshot(docRef, (docSnap) => {
                         if (docSnap.exists()) {
                             const cloudData = docSnap.data();
@@ -504,7 +505,7 @@
                             setSyncStatus(true, "Live Real-Time Syncing Active");
                         }
                     }, (error) => {
-                        console.error("Snapshot error, falling back:", error);
+                        console.error("Realtime subscription failed, fallback active:", error);
                         loadFromLocalFallback();
                     });
                     isSyncedMode = true;
@@ -512,7 +513,7 @@
                     loadFromLocalFallback();
                 }
             } catch (err) {
-                console.error("Firebase Connection Error:", err);
+                console.error("Firebase Initialization Connection Error:", err);
                 loadFromLocalFallback();
             }
         }
@@ -532,7 +533,7 @@
                 const docRef = doc(db, 'pillars', 'dashboardState');
                 await setDoc(docRef, { tasks, pillars, quarter, year }, { merge: true });
             } catch (e) {
-                console.error("Firestore write failure:", e);
+                console.error("Firestore write transaction error:", e);
             }
         }
 
