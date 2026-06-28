@@ -1,40 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mRNA Portfolio Operations Board</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+async function initializeFirebaseAndSync() {
+            try {
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        navyDark: '#080c16',     /* Deep Midnight Base */
-                        navyCard: '#111c30',     /* Rich Slate Card Panel */
-                        navyBorder: '#1e293b',   /* Strategic Structural Border */
-                        brandYellow: '#facc15',  /* Brand Accent Yellow */
-                        textWhite: '#ffffff',    /* High contrast text */
-                        textMuted: '#94a3b8',    /* Secondary slate gray */
-                        textLight: '#cbd5e1'     /* Highly readable body text */
-                    },
-                    fontFamily: {
-                        sans: ['Arial', 'Helvetica', 'sans-serif'],
-                    }
+                const credentials = await signInAnonymously(auth);
+                if (credentials.user) {
+                    // This is the correct Version 11 path reader
+                    const docRef = doc(db, 'pillars', 'dashboardState');
+                    
+                    // This creates the live real-time read pipeline
+                    onSnapshot(docRef, (docSnap) => {
+                        if (docSnap.exists()) {
+                            const cloudData = docSnap.data();
+                            activeDataset = cloudData.tasks || [];
+                            pillarsList = cloudData.pillars || [];
+                            selectedQuarter = cloudData.quarter || "Q3";
+                            selectedYear = cloudData.year || "2026";
+
+                            document.getElementById('select-quarter').value = selectedQuarter;
+                            document.getElementById('select-year').value = selectedYear;
+
+                            updateUIState();
+                            setSyncStatus(true, "Live Real-Time Syncing Active");
+                        } else {
+                            // If document doesn't exist, create it empty
+                            saveToCloud([], [], "Q3", "2026");
+                            setSyncStatus(true, "Live Real-Time Syncing Active");
+                        }
+                    }, (error) => {
+                        console.error("Real-time read pipeline failed:", error);
+                        loadFromLocalFallback();
+                    });
+                    isSyncedMode = true;
+                } else {
+                    loadFromLocalFallback();
                 }
+            } catch (err) {
+                console.error("Firebase Connection Error:", err);
+                loadFromLocalFallback();
             }
-        }
-    </script>
-    <style>
-        /* Smooth, premium transitions for presentations */
-        .slide-transition {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        /* Custom scrollbar to match dark premium styling */
-        ::-webkit-scrollbar {
-            width: 6px;
+        }            width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
