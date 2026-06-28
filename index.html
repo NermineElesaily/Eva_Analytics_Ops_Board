@@ -4,56 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mRNA Portfolio Operations Board</title>
-    <!-- Tailwind CSS for high-fidelity interactive layout -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons for clean, modern interfaces -->
     <script src="https://unpkg.com/lucide@latest"></script>
-
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        navyDark: '#080c16',     /* Deep Midnight Base */
-                        navyCard: '#111c30',     /* Rich Slate Card Panel */
-                        navyBorder: '#1e293b',   /* Strategic Structural Border */
-                        brandYellow: '#facc15',  /* Brand Accent Yellow */
-                        textWhite: '#ffffff',    /* High contrast text */
-                        textMuted: '#94a3b8',    /* Secondary slate gray */
-                        textLight: '#cbd5e1'     /* Highly readable body text */
+                        navyDark: '#080c16', navyCard: '#111c30', navyBorder: '#1e293b',
+                        brandYellow: '#facc15', textWhite: '#ffffff', textMuted: '#94a3b8', textLight: '#cbd5e1'
                     },
-                    fontFamily: {
-                        sans: ['Arial', 'Helvetica', 'sans-serif'],
-                    }
+                    fontFamily: { sans: ['Arial', 'Helvetica', 'sans-serif'] }
                 }
             }
         }
     </script>
     <style>
-        /* Smooth, premium transitions for presentations */
-        .slide-transition {
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        /* Custom scrollbar to match dark premium styling */
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #080c16;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #1e293b;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #facc15;
-        }
+        .slide-transition { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #080c16; }
+        ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #facc15; }
     </style>
 </head>
 <body class="bg-navyDark text-textWhite min-h-screen flex flex-col overflow-x-hidden font-sans">
 
-    <!-- Header Panel Area -->
     <header class="bg-navyCard border-b border-navyBorder px-6 py-4 flex flex-col lg:flex-row justify-between items-center gap-4 z-10">
         <div class="flex items-center gap-4">
             <div class="h-8 w-2 bg-brandYellow rounded-full"></div>
@@ -63,253 +38,147 @@
                 </h1>
                 <p class="text-xs text-brandYellow font-mono tracking-widest flex items-center gap-1.5">
                     <span id="sync-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
-                    <span id="sync-status">Connecting to Central Pipeline...</span>
+                    <span id="sync-status">Connecting to Pipeline Workspace...</span>
                 </p>
             </div>
         </div>
 
-        <!-- Year & Quarter Controls -->
         <div class="flex items-center gap-2 bg-navyDark p-1 rounded-lg border border-navyBorder">
             <div class="flex items-center gap-1 px-2">
                 <i data-lucide="calendar" class="w-3.5 h-3.5 text-brandYellow"></i>
                 <span class="text-xs text-textMuted font-bold">Scope:</span>
             </div>
-            <select id="select-quarter" class="bg-navyCard border border-navyBorder text-xs text-textWhite px-2.5 py-1 rounded-md font-bold focus:outline-none focus:border-brandYellow cursor-pointer">
-                <option value="Q1">Q1</option>
-                <option value="Q2">Q2</option>
-                <option value="Q3" selected>Q3</option>
-                <option value="Q4">Q4</option>
+            <select id="select-quarter" class="bg-navyCard border border-navyBorder text-xs text-textWhite px-2.5 py-1 rounded-md font-bold focus:outline-none cursor-pointer">
+                <option value="Q1">Q1</option><option value="Q2">Q2</option><option value="Q3" selected>Q3</option><option value="Q4">Q4</option>
             </select>
-            <select id="select-year" class="bg-navyCard border border-navyBorder text-xs text-textWhite px-2.5 py-1 rounded-md font-bold focus:outline-none focus:border-brandYellow cursor-pointer">
-                <option value="2025">2025</option>
-                <option value="2026" selected>2026</option>
-                <option value="2027">2027</option>
-                <option value="2028">2028</option>
-                <option value="2029">2029</option>
-                <option value="2030">2030</option>
+            <select id="select-year" class="bg-navyCard border border-navyBorder text-xs text-textWhite px-2.5 py-1 rounded-md font-bold focus:outline-none cursor-pointer">
+                <option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option>
             </select>
         </div>
 
-        <!-- Live Interactivity Controllers -->
         <div class="flex items-center gap-3 flex-wrap">
             <div class="bg-navyDark p-1 rounded-lg border border-navyBorder flex items-center">
-                <button id="btn-slides-mode" class="px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 bg-brandYellow text-navyDark">
-                    <i data-lucide="presentation" class="w-3.5 h-3.5"></i> Slides View
-                </button>
-                <button id="btn-console-mode" class="px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 text-textMuted hover:text-textWhite">
-                    <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i> Live Console
-                </button>
+                <button id="btn-slides-mode" class="px-4 py-1.5 rounded-md text-xs font-bold bg-brandYellow text-navyDark flex items-center gap-2"><i data-lucide="presentation" class="w-3.5 h-3.5"></i> Slides View</button>
+                <button id="btn-console-mode" class="px-4 py-1.5 rounded-md text-xs font-bold text-textMuted hover:text-textWhite flex items-center gap-2"><i data-lucide="layout-grid" class="w-3.5 h-3.5"></i> Live Console</button>
             </div>
-
-            <!-- Share & Live Sync Actions -->
-            <button id="btn-share-trigger" class="px-3 py-1.5 bg-brandYellow hover:bg-yellow-500 text-navyDark rounded-md text-xs font-bold transition-all flex items-center gap-1.5" title="Get live collaboration link for your manager">
-                <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share Workspace
-            </button>
-
-            <button id="btn-wipe-trigger" class="px-3 py-1.5 border border-navyBorder bg-navyDark/50 hover:bg-red-950/25 hover:border-red-500/30 text-textMuted hover:text-red-400 rounded-md text-xs transition-all flex items-center gap-1.5" title="Wipe slate and reset template">
-                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Wipe Slate
-            </button>
-
-            <button id="btn-samples" class="px-3 py-1.5 border border-brandYellow/25 hover:border-brandYellow text-brandYellow rounded-md text-xs font-semibold transition-all flex items-center gap-1.5">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Load Q3 Samples
-            </button>
+            <button id="btn-share-trigger" class="px-3 py-1.5 bg-brandYellow hover:bg-yellow-500 text-navyDark rounded-md text-xs font-bold flex items-center gap-1.5"><i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share Workspace</button>
+            <button id="btn-wipe-trigger" class="px-3 py-1.5 border border-navyBorder bg-navyDark/50 text-textMuted hover:text-red-400 rounded-md text-xs flex items-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i> Wipe Slate</button>
+            <button id="btn-samples" class="px-3 py-1.5 border border-brandYellow/25 hover:border-brandYellow text-brandYellow rounded-md text-xs font-semibold flex items-center gap-1.5"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Load Q3 Samples</button>
         </div>
     </header>
 
-    <!-- Main Workspace Content Frame -->
     <main class="flex-grow flex flex-col relative w-full">
-
-        <!-- VIEW 1: EXECUTIVE SLIDES MODE -->
         <div id="slides-view" class="flex-grow flex flex-col justify-between p-6 md:p-8 w-full max-w-7xl mx-auto">
             <div class="relative flex-grow flex items-center justify-center min-h-[480px]">
-
-                <!-- Slide 1: Welcome & Cover Page -->
                 <div id="slide-1" class="slide-content w-full h-full flex flex-col justify-center slide-transition opacity-100 scale-100 z-10">
                     <div class="flex items-start gap-5">
                         <div class="w-2.5 h-20 bg-brandYellow rounded-full"></div>
                         <div class="space-y-4">
                             <span class="text-xs bg-brandYellow/15 border border-brandYellow/25 text-brandYellow px-3 py-1 rounded-full font-mono uppercase tracking-widest font-bold">Strategic Portfolio Planning</span>
-                            <h2 class="text-4xl md:text-5xl font-extrabold tracking-tight text-textWhite leading-tight">mRNA Portfolio Operations</h2>
-                            <h3 class="text-3xl md:text-4xl font-bold text-brandYellow">
-                                <span class="scope-display">Q3 2026</span> Strategic Milestones & Status
-                            </h3>
+                            <h2 class="text-4xl md:text-5xl font-extrabold text-textWhite leading-tight">mRNA Portfolio Operations</h2>
+                            <h3 class="text-3xl md:text-4xl font-bold text-brandYellow"><span class="scope-display">Q3 2026</span> Strategic Status Matrix</h3>
                         </div>
                     </div>
                 </div>
 
-                <!-- Slide 2: Active Pillars Highlights Matrix -->
                 <div id="slide-2" class="slide-content w-full h-full hidden slide-transition opacity-0 scale-95 z-0 flex flex-col justify-between">
-                    <div class="space-y-1 mb-4 flex justify-between items-end">
-                        <div>
-                            <h2 class="text-2xl font-extrabold text-textWhite"><span class="scope-display">Q3 2026</span> Pillars Status Board</h2>
-                            <p class="text-xs text-brandYellow font-mono tracking-wider">Operational streams and featured checkpoints</p>
-                        </div>
+                    <div class="mb-4">
+                        <h2 class="text-2xl font-extrabold text-textWhite"><span class="scope-display">Q3 2026</span> Pillars Status Board</h2>
                     </div>
-                    <div class="overflow-y-auto max-h-[410px] pr-2 w-full flex-grow flex items-center justify-center">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full" id="pillars-highlights-grid">
-                            <!-- Populated Dynamically -->
-                        </div>
+                    <div class="overflow-y-auto max-h-[410px] w-full flex-grow flex items-center justify-center">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full" id="pillars-highlights-grid"></div>
                     </div>
                 </div>
 
-                <!-- Slide 3: Critical Obstacles Mitigation Ledger -->
                 <div id="slide-3" class="slide-content w-full h-full hidden slide-transition opacity-0 scale-95 z-0 flex flex-col justify-between">
-                    <div class="space-y-1 mb-4">
+                    <div class="mb-4">
                         <h2 class="text-2xl font-extrabold text-textWhite">Obstacles & Mitigations Ledger</h2>
-                        <p class="text-xs text-brandYellow font-mono tracking-wider">Active roadblocks demanding leadership action for <span class="scope-display">Q3 2026</span></p>
                     </div>
                     <div class="overflow-x-auto border border-navyBorder rounded-lg bg-navyCard flex-grow max-h-[380px]">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="border-b border-navyBorder bg-navyDark/60">
-                                    <th class="p-4 text-xs font-bold uppercase tracking-wider text-textMuted">Operational Pillar</th>
-                                    <th class="p-4 text-xs font-bold uppercase tracking-wider text-textMuted">Lead Owner</th>
-                                    <th class="p-4 text-xs font-bold uppercase tracking-wider text-textMuted">Critical Obstacle</th>
-                                    <th class="p-4 text-xs font-bold uppercase tracking-wider text-textMuted text-center">Severity</th>
-                                    <th class="p-4 text-xs font-bold uppercase tracking-wider text-textMuted">Action Mitigation Plan</th>
+                                <tr class="border-b border-navyBorder bg-navyDark/60 text-xs text-textMuted uppercase">
+                                    <th class="p-4">Operational Pillar</th><th class="p-4">Lead Owner</th><th class="p-4">Critical Obstacle</th><th class="p-4 text-center">Status</th><th class="p-4">Mitigation Plan</th>
                                 </tr>
                             </thead>
-                            <tbody id="slides-ledger-body">
-                                <!-- Table Entries Populated Dynamically -->
-                            </tbody>
+                            <tbody id="slides-ledger-body"></tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide Controller Interface Footer -->
             <div class="mt-6 flex justify-between items-center border-t border-navyBorder pt-4">
                 <div class="flex items-center gap-4 mx-auto">
-                    <button id="btn-prev-slide" class="p-2 border border-navyBorder bg-navyCard hover:border-brandYellow rounded-lg transition-all text-textWhite hover:text-brandYellow disabled:opacity-30 disabled:pointer-events-none">
-                        <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                    </button>
-                    <div class="flex gap-2" id="slide-indicators">
-                        <!-- Clickable Indicators Filled Dynamically -->
-                    </div>
-                    <button id="btn-next-slide" class="p-2 border border-navyBorder bg-navyCard hover:border-brandYellow rounded-lg transition-all text-textWhite hover:text-brandYellow disabled:opacity-30 disabled:pointer-events-none">
-                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
+                    <button id="btn-prev-slide" class="p-2 border border-navyBorder bg-navyCard rounded-lg text-textWhite disabled:opacity-30"><i data-lucide="arrow-left" class="w-4 h-4"></i></button>
+                    <div class="flex gap-2" id="slide-indicators"></div>
+                    <button id="btn-next-slide" class="p-2 border border-navyBorder bg-navyCard rounded-lg text-textWhite disabled:opacity-30"><i data-lucide="arrow-right" class="w-4 h-4"></i></button>
                 </div>
                 <span class="text-xs font-mono text-brandYellow font-bold" id="slide-counter-label">Slide 1 of 3</span>
             </div>
         </div>
 
-        <!-- VIEW 2: FULL COMPREHENSIVE LIVE INTERACTIVE CONSOLE -->
         <div id="console-view" class="hidden flex-grow flex flex-col lg:flex-row w-full h-full max-h-[calc(100vh-80px)] overflow-hidden">
-            <!-- Filter, Creation, and Archive Sidebar -->
             <aside class="w-full lg:w-80 bg-navyCard border-r border-navyBorder p-5 flex flex-col gap-6 shrink-0 overflow-y-auto">
-                <div class="space-y-1">
-                    <h3 class="text-xs font-bold text-brandYellow uppercase tracking-wider">Interactive Slicers</h3>
-                    <p class="text-[10px] text-textMuted uppercase font-semibold">Segment and organize objectives</p>
-                </div>
-
-                <!-- Dropdown Slicers -->
                 <div class="space-y-4">
                     <div class="space-y-1.5">
                         <label class="text-xs font-bold text-textMuted block">Lead Owner</label>
-                        <select id="filter-member" class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-sm text-textWhite focus:outline-none focus:border-brandYellow">
-                            <option value="All">All Members (Global Team)</option>
-                            <option value="Nermine">Nermine</option>
-                            <option value="Saif">Saif</option>
-                            <option value="Mohamed">Mohamed</option>
-                            <option value="Nourhan">Nourhan</option>
+                        <select id="filter-member" class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-sm text-textWhite focus:outline-none">
+                            <option value="All">All Members</option><option value="Nermine">Nermine</option><option value="Saif">Saif</option><option value="Mohamed">Mohamed</option><option value="Nourhan">Nourhan</option>
                         </select>
                     </div>
-
                     <div class="space-y-1.5">
                         <label class="text-xs font-bold text-textMuted block">Progress Status</label>
-                        <select id="filter-status" class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-sm text-textWhite focus:outline-none focus:border-brandYellow">
-                            <option value="All">All Statuses</option>
-                            <option value="Ahead of Schedule">Ahead of Schedule</option>
-                            <option value="Completed">Completed</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Overdue">Overdue</option>
+                        <select id="filter-status" class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-sm text-textWhite focus:outline-none">
+                            <option value="All">All Statuses</option><option value="Ahead of Schedule">Ahead of Schedule</option><option value="Completed">Completed</option><option value="In Progress">In Progress</option><option value="Overdue">Overdue</option>
                         </select>
                     </div>
-
-                    <!-- Focus & Archive Settings -->
                     <div class="pt-2 border-t border-navyBorder/50 space-y-3">
-                        <label class="text-xs font-bold text-brandYellow block uppercase tracking-wider">Focus Mode Settings</label>
-                        <div class="flex items-center gap-2.5">
-                            <input type="checkbox" id="toggle-hide-completed" class="w-4 h-4 rounded border-navyBorder bg-navyDark text-brandYellow focus:ring-brandYellow">
-                            <span class="text-xs font-medium text-textLight">Hide Completed Tasks</span>
-                        </div>
-                        <div class="flex items-center gap-2.5">
-                            <input type="checkbox" id="toggle-show-archived" class="w-4 h-4 rounded border-navyBorder bg-navyDark text-brandYellow focus:ring-brandYellow">
-                            <span class="text-xs font-semibold text-brandYellow">View Archived Vault</span>
-                        </div>
+                        <div class="flex items-center gap-2.5"><input type="checkbox" id="toggle-hide-completed" class="w-4 h-4 rounded border-navyBorder bg-navyDark text-brandYellow"><span class="text-xs text-textLight">Hide Completed Tasks</span></div>
+                        <div class="flex items-center gap-2.5"><input type="checkbox" id="toggle-show-archived" class="w-4 h-4 rounded border-navyBorder bg-navyDark text-brandYellow"><span class="text-xs text-brandYellow">View Archived Vault</span></div>
                     </div>
                 </div>
 
-                <!-- Live Dynamic Pillar Creator -->
                 <div class="border-t border-navyBorder pt-4 space-y-3">
-                    <h4 class="text-xs font-bold text-brandYellow uppercase tracking-wider">Create Custom Pillar</h4>
+                    <h4 class="text-xs font-bold text-brandYellow uppercase">Create Custom Pillar</h4>
                     <form id="frm-add-pillar" class="space-y-2">
-                        <input type="text" id="new-pillar-name" placeholder="e.g. 19. Clinical Trials" class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite placeholder-textMuted focus:outline-none focus:border-brandYellow" required>
-                        <button type="submit" class="w-full bg-navyDark border border-brandYellow/30 hover:border-brandYellow text-brandYellow text-[10px] font-bold py-1.5 rounded-md transition-all flex items-center justify-center gap-1">
-                            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Custom Pillar
-                        </button>
+                        <input type="text" id="new-pillar-name" placeholder="e.g. 19. Clinical Trials" class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite focus:outline-none" required>
+                        <button type="submit" class="w-full bg-navyDark border border-brandYellow/30 text-brandYellow text-[10px] font-bold py-1.5 rounded-md flex items-center justify-center gap-1"><i data-lucide="plus-circle" class="w-3.5 h-3.5"></i> Add Custom Pillar</button>
                     </form>
                 </div>
 
-                <!-- Live Task Builder Form -->
                 <div class="border-t border-navyBorder pt-4 space-y-3">
-                    <h4 class="text-xs font-bold text-brandYellow uppercase tracking-wider">Inject Operational Task</h4>
+                    <h4 class="text-xs font-bold text-brandYellow uppercase">Inject Operational Task</h4>
                     <form id="frm-add-task" class="space-y-2.5">
-                        <select id="add-pillar" class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite focus:outline-none focus:border-brandYellow" required>
-                            <!-- Loaded via State -->
-                        </select>
-                        <input type="text" id="add-task-desc" placeholder="Operational target description..." class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite placeholder-textMuted focus:outline-none focus:border-brandYellow" required>
+                        <select id="add-pillar" class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite focus:outline-none" required></select>
+                        <input type="text" id="add-task-desc" placeholder="Operational target description..." class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite focus:outline-none" required>
                         <div class="grid grid-cols-2 gap-2">
                             <select id="add-member" class="bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite focus:outline-none" required>
-                                <option value="Nermine">Nermine</option>
-                                <option value="Saif">Saif</option>
-                                <option value="Mohamed">Mohamed</option>
-                                <option value="Nourhan">Nourhan</option>
+                                <option value="Nermine">Nermine</option><option value="Saif">Saif</option><option value="Mohamed">Mohamed</option><option value="Nourhan">Nourhan</option>
                             </select>
                             <select id="add-status" class="bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite focus:outline-none" required>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Overdue">Overdue</option>
-                                <option value="Ahead of Schedule">Ahead of Schedule</option>
-                                <option value="Completed">Completed</option>
+                                <option value="In Progress">In Progress</option><option value="Overdue">Overdue</option><option value="Ahead of Schedule">Ahead of Schedule</option><option value="Completed">Completed</option>
                             </select>
                         </div>
-                        <button type="submit" class="w-full bg-brandYellow hover:bg-yellow-500 text-navyDark text-xs font-bold py-2 rounded-md transition-all">
-                            Add New Task Line
-                        </button>
+                        <button type="submit" class="w-full bg-brandYellow hover:bg-yellow-500 text-navyDark text-xs font-bold py-2 rounded-md">Add New Task Line</button>
                     </form>
                 </div>
             </aside>
 
-            <!-- Working Table Metrics Section -->
             <section class="flex-grow p-6 overflow-y-auto space-y-6">
-                <!-- Live KPI Counter Summary Cards -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="console-kpi-summary">
-                    <!-- Compiled Dynamically -->
-                </div>
-
-                <!-- Comprehensive Grid Task Matrix -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="console-kpi-summary"></div>
                 <div class="bg-navyCard border border-navyBorder rounded-lg overflow-hidden">
                     <div class="p-4 border-b border-navyBorder flex flex-col sm:flex-row justify-between items-center gap-2 bg-navyCard/60">
                         <h3 id="table-title" class="font-bold text-textWhite text-sm">Unified Operational Alignment Matrix</h3>
-                        <span class="text-xs text-brandYellow bg-brandYellow/10 border border-brandYellow/20 px-3 py-0.5 rounded-full font-mono font-bold" id="results-count">Analyzing...</span>
+                        <span class="text-xs text-brandYellow bg-brandYellow/10 border border-brandYellow/20 px-3 py-0.5 rounded-full font-mono font-bold" id="results-count">Syncing...</span>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="border-b border-navyBorder bg-navyDark/50 text-xs font-bold uppercase tracking-wider text-textMuted">
-                                    <th class="p-4 text-center w-12">Pin</th>
-                                    <th class="p-4">Operational Pillar</th>
-                                    <th class="p-4">Lead Owner</th>
-                                    <th class="p-4">Task Statement</th>
-                                    <th class="p-4 text-center">Status</th>
-                                    <th class="p-4">Operational Comments / Blockers</th>
-                                    <th class="p-4 text-center">Actions</th>
+                                <tr class="border-b border-navyBorder bg-navyDark/50 text-xs font-bold uppercase text-textMuted">
+                                    <th class="p-4 text-center w-12">Pin</th><th class="p-4">Operational Pillar</th><th class="p-4">Lead Owner</th><th class="p-4">Task Statement</th><th class="p-4 text-center">Status</th><th class="p-4">Comments / Blockers</th><th class="p-4 text-center">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="console-ledger-body">
-                                <!-- Dynamic Rows Compiling -->
-                            </tbody>
+                            <tbody id="console-ledger-body"></tbody>
                         </table>
                     </div>
                 </div>
@@ -317,160 +186,69 @@
         </div>
     </main>
 
-    <!-- Modal Elements Framework Panels -->
-    <!-- SHARE DIALOG WORKSPACE MODAL -->
     <div id="share-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
-        <div class="bg-navyCard border border-navyBorder rounded-xl max-w-lg w-full overflow-hidden shadow-2xl p-6 space-y-4">
-            <div class="flex items-center gap-3 text-brandYellow">
-                <i data-lucide="share-2" class="w-8 h-8"></i>
-                <h3 class="text-lg font-bold text-textWhite">Share Live Workspace</h3>
+        <div class="bg-navyCard border border-navyBorder rounded-xl max-w-lg w-full p-6 space-y-4 shadow-2xl">
+            <h3 class="text-lg font-bold text-textWhite flex items-center gap-2"><i data-lucide="share-2" class="text-brandYellow"></i> Share Live Workspace</h3>
+            <p class="text-xs text-textLight">Your board features an active real-time data sync pipeline. Share the URL with team members to collaborate instantly.</p>
+            <div class="flex gap-2">
+                <input type="text" id="share-link-input" readonly class="w-full bg-navyDark border border-navyBorder text-xs rounded-md px-3 py-2 text-brandYellow focus:outline-none">
+                <button id="btn-copy-action" class="px-4 py-2 bg-brandYellow hover:bg-yellow-500 text-navyDark text-xs font-bold rounded-md flex items-center gap-1.5"><i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy</button>
             </div>
-            <p class="text-xs text-textLight leading-relaxed">
-                This dashboard features a built-in real-time collaboration engine. By sharing the unique URL below with your manager, any modifications, task pins, and comments you make will synchronize across your screens instantly in real time!
-            </p>
-            <div class="space-y-1.5 pt-2">
-                <label class="text-[10px] uppercase tracking-wider font-bold text-textMuted block">Collaboration Sync Link</label>
-                <div class="flex gap-2">
-                    <input type="text" id="share-link-input" readonly class="w-full bg-navyDark border border-navyBorder text-xs rounded-md px-3 py-2 text-brandYellow focus:outline-none">
-                    <button id="btn-copy-action" class="px-4 py-2 bg-brandYellow hover:bg-yellow-500 text-navyDark text-xs font-bold rounded-md transition-all flex items-center gap-1.5 shrink-0">
-                        <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copy Link
-                    </button>
-                </div>
-                <p id="share-copied-toast" class="text-[10px] text-emerald-400 font-bold hidden">Link copied to clipboard successfully!</p>
-            </div>
-            <div class="pt-4 flex justify-end gap-3 border-t border-navyBorder">
-                <button id="btn-share-close" class="px-4 py-2 border border-navyBorder bg-navyDark/50 hover:bg-navyDark text-textLight rounded-md text-xs transition-all">
-                    Close Panel
-                </button>
-            </div>
+            <p id="share-copied-toast" class="text-[10px] text-emerald-400 font-bold hidden">Link copied successfully!</p>
+            <div class="pt-2 flex justify-end"><button id="btn-share-close" class="px-4 py-2 border border-navyBorder bg-navyDark text-textLight text-xs rounded-md">Close</button></div>
         </div>
     </div>
 
-    <!-- LIVE EDIT ROW DRAWER INPUT MODAL -->
     <div id="edit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-        <div class="bg-navyCard border border-navyBorder rounded-xl max-w-lg w-full overflow-hidden shadow-2xl slide-transition transform scale-100">
-            <div class="bg-navyDark/60 border-b border-navyBorder px-6 py-4 flex justify-between items-center">
-                <div class="flex items-center gap-2">
-                    <div class="w-2.5 h-5 bg-brandYellow rounded-full"></div>
-                    <h3 class="text-sm font-bold text-textWhite uppercase tracking-wider">Modify Operational Row</h3>
-                </div>
-                <button id="btn-edit-close" class="text-textMuted hover:text-textWhite transition-all">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-            </div>
-
+        <div class="bg-navyCard border border-navyBorder rounded-xl max-w-lg w-full overflow-hidden shadow-2xl">
             <form id="frm-edit-task" class="p-6 space-y-4">
                 <input type="hidden" id="edit-task-id">
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-textMuted">Operational Pillar</label>
-                        <input type="text" id="edit-pillar" class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textMuted font-bold cursor-not-allowed" disabled>
-                    </div>
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-textMuted">Lead Owner</label>
-                        <select id="edit-member" class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textWhite focus:outline-none focus:border-brandYellow">
-                            <option value="Nermine">Nermine</option>
-                            <option value="Saif">Saif</option>
-                            <option value="Mohamed">Mohamed</option>
-                            <option value="Nourhan">Nourhan</option>
-                        </select>
-                    </div>
+                    <div class="space-y-1.5"><label class="text-xs font-bold text-textMuted">Operational Pillar</label><input type="text" id="edit-pillar" class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textMuted cursor-not-allowed" disabled></div>
+                    <div class="space-y-1.5"><label class="text-xs font-bold text-textMuted">Lead Owner</label><select id="edit-member" class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textWhite focus:outline-none"><option value="Nermine">Nermine</option><option value="Saif">Saif</option><option value="Mohamed">Mohamed</option><option value="Nourhan">Nourhan</option></select></div>
                 </div>
-
-                <div class="space-y-1.5">
-                    <label class="text-xs font-bold text-textMuted">Active Task Statement</label>
-                    <textarea id="edit-task-desc" rows="2" class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textWhite focus:outline-none focus:border-brandYellow" required></textarea>
-                </div>
-
+                <div class="space-y-1.5"><label class="text-xs font-bold text-textMuted">Active Task Statement</label><textarea id="edit-task-desc" rows="2" class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textWhite focus:outline-none" required></textarea></div>
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-textMuted">Milestone Month</label>
-                        <select id="edit-milestone" class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textWhite focus:outline-none focus:border-brandYellow">
-                            <option value="April">April</option>
-                            <option value="May">May</option>
-                            <option value="June">June</option>
-                        </select>
-                    </div>
-                    <div class="space-y-1.5">
-                        <label class="text-xs font-bold text-textMuted">Operational Status</label>
-                        <select id="edit-status" class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textWhite focus:outline-none focus:border-brandYellow">
-                            <option value="Ahead of Schedule">Ahead of Schedule</option>
-                            <option value="Completed">Completed</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Overdue">Overdue</option>
-                        </select>
-                    </div>
+                    <div class="space-y-1.5"><label class="text-xs font-bold text-textMuted">Milestone Month</label><select id="edit-milestone" class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textWhite focus:outline-none"><option value="April">April</option><option value="May">May</option><option value="June">June</option></select></div>
+                    <div class="space-y-1.5"><label class="text-xs font-bold text-textMuted">Operational Status</label><select id="edit-status" class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textWhite focus:outline-none"><option value="Ahead of Schedule">Ahead of Schedule</option><option value="Completed">Completed</option><option value="In Progress">In Progress</option><option value="Overdue">Overdue</option></select></div>
                 </div>
-
-                <div class="space-y-1.5">
-                    <label class="text-xs font-bold text-textMuted">Critical Obstacles / Custom Comments</label>
-                    <textarea id="edit-comment" rows="3" placeholder="Identify roadblock parameters or write active updates here..." class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textWhite focus:outline-none focus:border-brandYellow"></textarea>
-                </div>
-
+                <div class="space-y-1.5"><label class="text-xs font-bold text-textMuted">Comments / Blockers</label><textarea id="edit-comment" rows="3" placeholder="Identify roadblock parameters here..." class="w-full bg-navyDark border border-navyBorder rounded-md p-2.5 text-xs text-textWhite focus:outline-none"></textarea></div>
                 <div class="pt-4 flex justify-end gap-3 border-t border-navyBorder">
-                    <button type="button" id="btn-edit-cancel" class="px-4 py-2 border border-navyBorder bg-navyDark/50 hover:bg-navyDark text-textLight rounded-md text-xs transition-all">
-                        Cancel Change
-                    </button>
-                    <button type="submit" class="px-4 py-2 bg-brandYellow hover:bg-yellow-500 text-navyDark text-xs font-bold rounded-md transition-all">
-                        Save System Updates
-                    </button>
+                    <button type="button" id="btn-edit-cancel" class="px-4 py-2 border border-navyBorder bg-navyDark text-textLight text-xs rounded-md">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-brandYellow text-navyDark text-xs font-bold rounded-md">Save Updates</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- NOTIFICATION AND CONFIRMATION SYSTEM MODALS -->
-    <div id="info-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="bg-navyCard border border-navyBorder rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-            <div class="flex items-center gap-3 text-brandYellow">
-                <i data-lucide="info" class="w-8 h-8"></i>
-                <h3 id="info-modal-title" class="text-lg font-bold text-textWhite">System Notification</h3>
-            </div>
-            <p id="info-modal-desc" class="text-sm text-textLight leading-relaxed"></p>
-            <div class="pt-4 flex justify-end border-t border-navyBorder">
-                <button id="btn-info-close" class="px-4 py-2 bg-brandYellow hover:bg-yellow-500 text-navyDark text-xs font-bold rounded-md transition-all">
-                    Acknowledge
-                </button>
-            </div>
-        </div>
-    </div>
-
     <div id="delete-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
         <div class="bg-navyCard border border-navyBorder rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-            <div class="flex items-center gap-3 text-red-500">
-                <i data-lucide="alert-triangle" class="w-8 h-8"></i>
-                <h3 class="text-lg font-bold text-textWhite">Confirm Deletion</h3>
-            </div>
-            <p class="text-sm text-textLight leading-relaxed">Are you absolutely sure you want to delete this operational objective? This action is permanent and cannot be undone.</p>
+            <h3 class="text-lg font-bold text-textWhite flex items-center gap-2"><i data-lucide="alert-triangle" class="text-red-500"></i> Confirm Deletion</h3>
+            <p class="text-sm text-textLight">Are you sure you want to remove this operational line objective completely?</p>
             <input type="hidden" id="delete-task-id-holder">
             <div class="pt-4 flex justify-end gap-3 border-t border-navyBorder">
-                <button id="btn-delete-cancel" class="px-4 py-2 border border-navyBorder bg-navyDark/50 hover:bg-navyDark text-textLight text-xs rounded-md transition-all">Cancel</button>
-                <button id="btn-delete-confirm" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-textWhite text-xs font-bold rounded-md transition-all">Delete Permanently</button>
+                <button id="btn-delete-cancel" class="px-4 py-2 border border-navyBorder bg-navyDark text-textLight text-xs rounded-md">Cancel</button>
+                <button id="btn-delete-confirm" class="px-4 py-2 bg-red-600 text-textWhite text-xs font-bold rounded-md">Delete</button>
             </div>
         </div>
     </div>
 
     <div id="reset-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
         <div class="bg-navyCard border border-navyBorder rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
-            <div class="flex items-center gap-3 text-red-500">
-                <i data-lucide="alert-triangle" class="w-8 h-8"></i>
-                <h3 class="text-lg font-bold text-textWhite">Reset System Template?</h3>
-            </div>
-            <p class="text-sm text-textMuted leading-relaxed">This action will completely wipe all custom pipeline modifications, task edits, dynamic custom pillars, and logged operational obstacles, restoring the workspace back to an empty planning slate.</p>
+            <h3 class="text-lg font-bold text-textWhite flex items-center gap-2"><i data-lucide="alert-triangle" class="text-red-500"></i> Clear System Slate?</h3>
+            <p class="text-sm text-textMuted">This will clear out the current configuration and clear the active layout board back to blank.</p>
             <div class="pt-4 flex justify-end gap-3 border-t border-navyBorder">
-                <button id="btn-reset-cancel" class="px-4 py-2 border border-navyBorder bg-navyDark/50 hover:bg-navyDark text-textLight rounded-md text-xs transition-all">Cancel</button>
-                <button id="btn-reset-confirm" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-textWhite text-xs font-bold rounded-md transition-all">Perform Complete Wipe</button>
+                <button id="btn-reset-cancel" class="px-4 py-2 border border-navyBorder bg-navyDark text-textLight text-xs rounded-md">Cancel</button>
+                <button id="btn-reset-confirm" class="px-4 py-2 bg-red-600 text-textWhite text-xs font-bold rounded-md">Wipe Data</button>
             </div>
         </div>
     </div>
 
-    <!-- Core Database Application Architecture Script Engine Block -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // State Variables Context Array Configurations
         const samplePillars = ["1. RVFV", "6. PSDA Polymer", "7. LNP Development", "13. Analytics", "14. ELN & PM", "15. People", "18. Vaccine TT"];
         const sampleDataset = [
             { id: 1, pillar: "1. RVFV", member: "Nermine", milestone: "April", task: "Review EDA comments on RVFV file and draft response plan before deadline", status: "Overdue", comments: "Awaiting final analytical validation parameters.", archived: false, featured: true },
@@ -493,19 +271,18 @@
         let currentSlide = 1;
         const totalSlides = 3;
 
-        // Central Pre-Configured Stable Database Cluster Configuration
+        // PASTE YOUR EXTRACTED FIREBASE CONSOLE APP CONFIGURATION BLOCK OBJECT RIGHT HERE:
         const firebaseConfig = {
-            apiKey: "AIzaSyDE_X6m5Xl58x29nLp98zK3WqR_vT7mX0k",
-            authDomain: "shared-ops-matrix-2026.firebaseapp.com",
-            projectId: "shared-ops-matrix-2026",
-            storageBucket: "shared-ops-matrix-2026.appspot.com",
-            messagingSenderId: "981247053120",
-            appId: "1:981247053120:web:ee6102f90a184c7c5b1b42"
+            apiKey: "AIzaSyBLzP_WMEeCM1fKL7nOK_yuGiKJQPThLW4",
+            authDomain: "operations-board-875e9.firebaseapp.com",
+            projectId: "operations-board-875e9",
+            storageBucket: "operations-board-875e9.firebasestorage.app",
+            messagingSenderId: "374183042105",
+            appId: "1:374183042105:web:cc270c7579eb7210cf81e8",
+            measurementId: "G-VQJS45E429"
         };
 
-        let db = null;
-        let auth = null;
-        let isSyncedMode = false;
+        let db = null; let auth = null; let isSyncedMode = false;
 
         async function initializeFirebaseAndSync() {
             try {
@@ -515,7 +292,7 @@
 
                 const credentials = await signInAnonymously(auth);
                 if (credentials.user) {
-                    const docRef = doc(db, 'pipelines', 'globalDashboardState');
+                    const docRef = doc(db, 'pillars', 'dashboardState');
                     
                     onSnapshot(docRef, (docSnap) => {
                         if (docSnap.exists()) {
@@ -524,28 +301,21 @@
                             pillarsList = cloudData.pillars || [];
                             selectedQuarter = cloudData.quarter || "Q3";
                             selectedYear = cloudData.year || "2026";
-
                             document.getElementById('select-quarter').value = selectedQuarter;
                             document.getElementById('select-year').value = selectedYear;
-
                             updateUIState();
-                            setSyncStatus(true, "Live Central Alignment Active");
+                            setSyncStatus(true, "Live Sync Channel Configured");
                         } else {
                             saveToCloud([], [], "Q3", "2026");
-                            setSyncStatus(true, "Live Central Alignment Active");
+                            setSyncStatus(true, "Live Sync Channel Configured");
                         }
                     }, (error) => {
-                        console.error("Central subscription fallback active:", error);
+                        console.error("Local client subscription fallback active:", error);
                         loadFromLocalFallback();
                     });
                     isSyncedMode = true;
-                } else {
-                    loadFromLocalFallback();
-                }
-            } catch (err) {
-                console.error("Central Pipeline Routing Error:", err);
-                loadFromLocalFallback();
-            }
+                } else { loadFromLocalFallback(); }
+            } catch (err) { console.error("Database Initial Connection Error:", err); loadFromLocalFallback(); }
         }
 
         function loadFromLocalFallback() {
@@ -554,17 +324,15 @@
             selectedQuarter = localStorage.getItem('mRNA_Quarter') || "Q3";
             selectedYear = localStorage.getItem('mRNA_Year') || "2026";
             updateUIState();
-            setSyncStatus(false, "Offline Mode Sandbox");
+            setSyncStatus(false, "Local Memory Run Sandbox");
         }
 
         async function saveToCloud(tasks, pillars, quarter, year) {
             if (!db || !auth.currentUser) return;
             try {
-                const docRef = doc(db, 'pipelines', 'globalDashboardState');
+                const docRef = doc(db, 'pillars', 'dashboardState');
                 await setDoc(docRef, { tasks, pillars, quarter, year }, { merge: true });
-            } catch (e) {
-                console.error("Central write error:", e);
-            }
+            } catch (e) { console.error("Cloud document frame serialization error:", e); }
         }
 
         function syncState() {
@@ -586,31 +354,19 @@
             label.innerText = message;
         }
 
-        function updateUIState() {
-            populatePillarDropdowns();
-            applyScopeLabels();
-            applySlideData();
-            applyConsoleFilters();
-            renderIndicators();
-        }
-
+        function updateUIState() { populatePillarDropdowns(); applyScopeLabels(); applySlideData(); applyConsoleFilters(); renderIndicators(); }
         function applyScopeLabels() {
             const scopeString = `${selectedQuarter} ${selectedYear}`;
             document.querySelectorAll('.scope-display').forEach(el => el.innerText = scopeString);
             document.getElementById('btn-samples').innerHTML = `<i data-lucide="sparkles" class="w-3.5 h-3.5"></i> Load ${selectedQuarter} Samples`;
             lucide.createIcons();
         }
-
         function populatePillarDropdowns() {
             const dropSelect = document.getElementById('add-pillar');
             dropSelect.innerHTML = '<option value="" disabled selected>Select Target Pillar</option>';
-            if (pillarsList.length === 0) {
-                dropSelect.innerHTML += '<option value="" disabled>No custom pillars added yet</option>';
-            } else {
-                pillarsList.forEach(p => dropSelect.innerHTML += `<option value="${p}">${p}</option>`);
-            }
+            if (pillarsList.length === 0) { dropSelect.innerHTML += '<option value="" disabled>No pillars added</option>'; }
+            else { pillarsList.forEach(p => dropSelect.innerHTML += `<option value="${p}">${p}</option>`); }
         }
-
         function getStatusColor(status) {
             switch(status) {
                 case 'Overdue': return 'text-red-400 bg-red-950/30 border border-red-500/20';
@@ -620,158 +376,78 @@
                 default: return 'text-textMuted bg-navyBorder';
             }
         }
-
         function applySlideData() {
             const pillarsGrid = document.getElementById('pillars-highlights-grid');
             pillarsGrid.innerHTML = '';
-            if (pillarsList.length === 0) {
-                pillarsGrid.innerHTML = `<div class="col-span-full text-center p-8 text-textMuted italic">No active pillars mapped yet. Click 'Load Samples' or use the Console.</div>`;
-            } else {
+            if (pillarsList.length === 0) { pillarsGrid.innerHTML = `<div class="col-span-full text-center p-8 text-textMuted italic">No custom pillars active. Click Load Samples.</div>`; }
+            else {
                 pillarsList.forEach(p => {
                     const tasks = activeDataset.filter(d => d.pillar === p && !d.archived);
                     let displayT = tasks.find(t => t.featured) || tasks[0];
-                    const text = displayT ? displayT.task : "No active goals logged.";
+                    const text = displayT ? displayT.task : "No operational goals logged.";
                     const owner = displayT ? displayT.member : "Unassigned";
                     const stat = displayT ? displayT.status : "Planned";
-                    pillarsGrid.innerHTML += `
-                        <div class="bg-navyCard border border-navyBorder p-4 rounded-xl flex flex-col justify-between min-h-[175px]">
-                            <div class="space-y-2">
-                                <h4 class="text-xs font-extrabold text-brandYellow truncate">${p}</h4>
-                                <p class="text-[11px] text-textLight leading-relaxed line-clamp-3">${text}</p>
-                            </div>
-                            <div class="mt-4 pt-2 border-t border-navyBorder/50 flex justify-between items-center">
-                                <span class="text-[9px] text-textMuted">${owner}</span>
-                                <span class="text-[8px] font-bold px-1.5 py-0.5 rounded-full ${getStatusColor(stat)}">${stat}</span>
-                            </div>
-                        </div>`;
+                    pillarsGrid.innerHTML += `<div class="bg-navyCard border border-navyBorder p-4 rounded-xl flex flex-col justify-between min-h-[175px]"><div class="space-y-2"><h4 class="text-xs font-extrabold text-brandYellow truncate">${p}</h4><p class="text-[11px] text-textLight leading-relaxed line-clamp-3">${text}</p></div><div class="mt-4 pt-2 border-t border-navyBorder/50 flex justify-between items-center"><span class="text-[9px] text-textMuted">${owner}</span><span class="text-[8px] font-bold px-1.5 py-0.5 rounded-full ${getStatusColor(stat)}">${stat}</span></div></div>`;
                 });
             }
-
             const ledgerBody = document.getElementById('slides-ledger-body');
             ledgerBody.innerHTML = '';
             const obstacles = activeDataset.filter(t => !t.archived && (t.status === 'Overdue' || t.status === 'In Progress'));
-            if (obstacles.length === 0) {
-                ledgerBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-textMuted italic">No active roadblocks found.</td></tr>`;
-            } else {
+            if (obstacles.length === 0) { ledgerBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-textMuted italic">No active ledger blockers.</td></tr>`; }
+            else {
                 obstacles.forEach(item => {
-                    ledgerBody.innerHTML += `
-                        <tr class="border-b border-navyBorder/50 hover:bg-[#0d1527] text-xs text-textLight">
-                            <td class="p-4 font-bold text-brandYellow">${item.pillar}</td>
-                            <td class="p-4 font-semibold">${item.member}</td>
-                            <td class="p-4 text-white">${item.task}</td>
-                            <td class="p-4 text-center"><span class="px-2.5 py-0.5 rounded-full font-bold text-[9px] ${getStatusColor(item.status)}">${item.status}</span></td>
-                            <td class="p-4 text-textMuted italic">${item.comments || 'Mitigation plan formulation in progress.'}</td>
-                        </tr>`;
+                    ledgerBody.innerHTML += `<tr class="border-b border-navyBorder/50 text-xs text-textLight"><td class="p-4 font-bold text-brandYellow">${item.pillar}</td><td class="p-4 font-semibold">${item.member}</td><td class="p-4 text-white">${item.task}</td><td class="p-4 text-center"><span class="px-2.5 py-0.5 rounded-full font-bold text-[9px] ${getStatusColor(item.status)}">${item.status}</span></td><td class="p-4 text-textMuted italic">${item.comments || 'Plan optimization tracking active.'}</td></tr>`;
                 });
             }
             lucide.createIcons();
         }
-
         function applyConsoleFilters() {
             const memF = document.getElementById('filter-member').value;
             const statF = document.getElementById('filter-status').value;
-            let filtered = activeDataset.filter(d => {
-                return (memF === 'All' || d.member === memF) && (statF === 'All' || d.status === statF) && (d.archived === showArchivedSetting);
-            });
-            if (hideCompletedSetting && !showArchivedSetting) {
-                filtered = filtered.filter(d => d.status !== 'Completed');
-            }
-
+            let filtered = activeDataset.filter(d => (memF === 'All' || d.member === memF) && (statF === 'All' || d.status === statF) && (d.archived === showArchivedSetting));
+            if (hideCompletedSetting && !showArchivedSetting) { filtered = filtered.filter(d => d.status !== 'Completed'); }
             const total = activeDataset.filter(t => !t.archived).length;
             const overdue = activeDataset.filter(t => !t.archived && t.status === 'Overdue').length;
             const ongoing = activeDataset.filter(t => !t.archived && t.status === 'In Progress').length;
             const archived = activeDataset.filter(t => t.archived).length;
-
             document.getElementById('console-kpi-summary').innerHTML = `
-                <div class="bg-navyCard border border-navyBorder p-4 rounded-lg"><span class="text-xs text-textMuted block font-semibold">Total Active Objectives</span><h3 class="text-2xl font-bold mt-1 text-white">${total} Tasks</h3></div>
+                <div class="bg-navyCard border border-navyBorder p-4 rounded-lg"><span class="text-xs text-textMuted block font-semibold">Total Objectives</span><h3 class="text-2xl font-bold mt-1 text-white">${total} Tasks</h3></div>
                 <div class="bg-navyCard border border-navyBorder p-4 rounded-lg border-l-red-500"><span class="text-xs text-textMuted block font-semibold">Critical Overdue</span><h3 class="text-2xl font-bold mt-1 text-red-400">${overdue} Blocked</h3></div>
                 <div class="bg-navyCard border border-navyBorder p-4 rounded-lg border-l-brandYellow"><span class="text-xs text-textMuted block font-semibold">In Progress Phase</span><h3 class="text-2xl font-bold mt-1 text-brandYellow">${ongoing} Ongoing</h3></div>
                 <div class="bg-navyCard border border-navyBorder p-4 rounded-lg border-l-brandYellow/30"><span class="text-xs text-textMuted block font-semibold">Archived Vault</span><h3 class="text-2xl font-bold mt-1 text-textMuted">${archived} Stored</h3></div>`;
-
-            const consoleBody = document.getElementById('console-ledger-body');
-            consoleBody.innerHTML = '';
-            document.getElementById('results-count').innerText = `${filtered.length} records active`;
-            document.getElementById('table-title').innerText = showArchivedSetting ? "Archived Operational Vault (Read Only)" : "Unified Operational Alignment Matrix";
-
-            if (filtered.length === 0) {
-                consoleBody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-textMuted">No objectives found matching parameters.</td></tr>`;
-                return;
-            }
-
+            const consoleBody = document.getElementById('console-ledger-body'); consoleBody.innerHTML = '';
+            document.getElementById('results-count').innerText = `${filtered.length} records mapped`;
+            if (filtered.length === 0) { consoleBody.innerHTML = `<tr><td colspan="7" class="p-8 text-center text-textMuted">No aligned objectives match specifications.</td></tr>`; return; }
             filtered.forEach(item => {
-                const isF = item.featured ? "★" : "☆";
-                const starColor = item.featured ? "text-brandYellow" : "text-textMuted hover:text-brandYellow";
-                consoleBody.innerHTML += `
-                    <tr class="border-b border-navyBorder/50 text-xs text-textLight hover:bg-navyDark/40">
-                        <td class="p-4 text-center">${item.archived ? '' : `<button data-id="${item.id}" class="btn-pin text-base ${starColor}">${isF}</button>`}</td>
-                        <td class="p-4 font-bold text-brandYellow">${item.pillar}</td>
-                        <td class="p-4 font-semibold">${item.member}</td>
-                        <td class="p-4 text-white">${item.task}</td>
-                        <td class="p-4 text-center"><span class="px-2.5 py-0.5 rounded-full font-bold text-[9px] ${getStatusColor(item.status)}">${item.status}</span></td>
-                        <td class="p-4">${item.comments || '<span class="text-textMuted italic">No updates.</span>'}</td>
-                        <td class="p-4 flex gap-1 justify-center">
-                            <button data-id="${item.id}" class="btn-edit-row px-2 py-1 bg-navyDark border border-navyBorder hover:bg-brandYellow hover:text-navyDark rounded text-[10px] font-bold">Edit</button>
-                            <button data-id="${item.id}" class="btn-archive-row px-2 py-1 bg-navyDark border border-navyBorder hover:bg-brandYellow hover:text-navyDark rounded text-[10px]">${item.archived ? 'Restore' : 'Archive'}</button>
-                            <button data-id="${item.id}" class="btn-delete-row px-2 py-1 bg-navyDark border border-red-500/20 text-red-400 rounded text-[10px]">Delete</button>
-                        </td>
-                    </tr>`;
+                const isF = item.featured ? "★" : "☆"; const starColor = item.featured ? "text-brandYellow" : "text-textMuted hover:text-brandYellow";
+                consoleBody.innerHTML += `<tr class="border-b border-navyBorder/50 text-xs text-textLight"><td class="p-4 text-center">${item.archived ? '' : `<button data-id="${item.id}" class="btn-pin text-base ${starColor}">${isF}</button>`}</td><td class="p-4 font-bold text-brandYellow">${item.pillar}</td><td class="p-4 font-semibold">${item.member}</td><td class="p-4 text-white">${item.task}</td><td class="p-4 text-center"><span class="px-2.5 py-0.5 rounded-full font-bold text-[9px] ${getStatusColor(item.status)}">${item.status}</span></td><td class="p-4">${item.comments || '<span class="text-textMuted italic">No updates cataloged.</span>'}</td><td class="p-4 flex gap-1 justify-center"><button data-id="${item.id}" class="btn-edit-row px-2 py-1 bg-navyDark border border-navyBorder hover:bg-brandYellow hover:text-navyDark rounded text-[10px] font-bold">Edit</button><button data-id="${item.id}" class="btn-archive-row px-2 py-1 bg-navyDark border border-navyBorder hover:bg-brandYellow hover:text-navyDark rounded text-[10px]">${item.archived ? 'Restore' : 'Archive'}</button><button data-id="${item.id}" class="btn-delete-row px-2 py-1 bg-navyDark border border-red-500/20 text-red-400 rounded text-[10px]">Delete</button></td></tr>`;
             });
             lucide.createIcons();
         }
-
         function goToSlide(slideNum) {
-            for (let i = 1; i <= totalSlides; i++) {
-                const s = document.getElementById(`slide-${i}`);
-                if(s) {
-                    s.classList.add('hidden', 'opacity-0', 'scale-95');
-                    s.classList.remove('opacity-100', 'scale-100', 'z-10');
-                }
-            }
+            for (let i = 1; i <= totalSlides; i++) { const s = document.getElementById(`slide-${i}`); if(s) s.classList.add('hidden', 'opacity-0', 'scale-95'); }
             const target = document.getElementById(`slide-${slideNum}`);
-            if(target) {
-                target.classList.remove('hidden');
-                setTimeout(() => {
-                    target.classList.remove('opacity-0', 'scale-95');
-                    target.classList.add('opacity-100', 'scale-100', 'z-10');
-                }, 50);
-            }
-            currentSlide = slideNum;
-            document.getElementById('btn-prev-slide').disabled = (currentSlide === 1);
-            document.getElementById('btn-next-slide').disabled = (currentSlide === totalSlides);
-            document.getElementById('slide-counter-label').innerText = `Slide ${currentSlide} of ${totalSlides}`;
-            renderIndicators();
+            if(target) { target.classList.remove('hidden'); setTimeout(() => { target.classList.remove('opacity-0', 'scale-95'); target.classList.add('opacity-100', 'scale-100', 'z-10'); }, 50); }
+            currentSlide = slideNum; document.getElementById('btn-prev-slide').disabled = (currentSlide === 1); document.getElementById('btn-next-slide').disabled = (currentSlide === totalSlides);
+            document.getElementById('slide-counter-label').innerText = `Slide ${currentSlide} of ${totalSlides}`; renderIndicators();
         }
-
         function renderIndicators() {
-            const container = document.getElementById('slide-indicators');
-            if(!container) return;
-            container.innerHTML = '';
-            for (let i = 1; i <= totalSlides; i++) {
-                const activeClass = i === currentSlide ? "bg-brandYellow" : "bg-navyBorder hover:bg-brandYellow/50";
-                container.innerHTML += `<span data-slide="${i}" class="indicator-dot w-2.5 h-2.5 rounded-full cursor-pointer ${activeClass}"></span>`;
-            }
+            const container = document.getElementById('slide-indicators'); if(!container) return; container.innerHTML = '';
+            for (let i = 1; i <= totalSlides; i++) { container.innerHTML += `<span data-slide="${i}" class="indicator-dot w-2.5 h-2.5 rounded-full cursor-pointer ${i === currentSlide ? "bg-brandYellow" : "bg-navyBorder"}"></span>`; }
         }
 
         document.getElementById('btn-prev-slide').addEventListener('click', () => { if (currentSlide > 1) goToSlide(currentSlide - 1); });
         document.getElementById('btn-next-slide').addEventListener('click', () => { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); });
-        document.getElementById('slide-indicators').addEventListener('click', (e) => {
-            if (e.target.classList.contains('indicator-dot')) goToSlide(parseInt(e.target.dataset.slide));
-        });
-
+        document.getElementById('slide-indicators').addEventListener('click', (e) => { if (e.target.classList.contains('indicator-dot')) goToSlide(parseInt(e.target.dataset.slide)); });
         document.getElementById('btn-slides-mode').addEventListener('click', () => {
-            document.getElementById('btn-slides-mode').className = "px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 bg-brandYellow text-navyDark";
-            document.getElementById('btn-console-mode').className = "px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 text-textMuted hover:text-textWhite";
-            document.getElementById('slides-view').classList.remove('hidden');
-            document.getElementById('console-view').classList.add('hidden');
-            applySlideData();
+            document.getElementById('btn-slides-mode').className = "px-4 py-1.5 rounded-md text-xs font-bold bg-brandYellow text-navyDark";
+            document.getElementById('btn-console-mode').className = "px-4 py-1.5 rounded-md text-xs font-bold text-textMuted hover:text-textWhite";
+            document.getElementById('slides-view').classList.remove('hidden'); document.getElementById('console-view').classList.add('hidden'); applySlideData();
         });
-
         document.getElementById('btn-console-mode').addEventListener('click', () => {
-            document.getElementById('btn-console-mode').className = "px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 bg-brandYellow text-navyDark";
-            document.getElementById('btn-slides-mode').className = "px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 text-textMuted hover:text-textWhite";
-            document.getElementById('console-view').classList.remove('hidden');
-            document.getElementById('slides-view').classList.add('hidden');
-            applyConsoleFilters();
+            document.getElementById('btn-console-mode').className = "px-4 py-1.5 rounded-md text-xs font-bold bg-brandYellow text-navyDark";
+            document.getElementById('btn-slides-mode').className = "px-4 py-1.5 rounded-md text-xs font-bold text-textMuted hover:text-textWhite";
+            document.getElementById('console-view').classList.remove('hidden'); document.getElementById('slides-view').classList.add('hidden'); applyConsoleFilters();
         });
 
         document.getElementById('select-quarter').addEventListener('change', (e) => { selectedQuarter = e.target.value; syncState(); });
@@ -782,114 +458,59 @@
         document.getElementById('toggle-show-archived').addEventListener('change', (e) => { showArchivedSetting = e.target.checked; applyConsoleFilters(); });
 
         document.getElementById('frm-add-pillar').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const input = document.getElementById('new-pillar-name');
-            const name = input.value.trim();
-            if (name && !pillarsList.includes(name)) {
-                pillarsList.push(name);
-                input.value = '';
-                syncState();
-            }
+            e.preventDefault(); const input = document.getElementById('new-pillar-name'); const name = input.value.trim();
+            if (name && !pillarsList.includes(name)) { pillarsList.push(name); input.value = ''; syncState(); }
         });
-
         document.getElementById('frm-add-task').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const pillar = document.getElementById('add-pillar').value;
-            const task = document.getElementById('add-task-desc').value.trim();
-            const member = document.getElementById('add-member').value;
-            const status = document.getElementById('add-status').value;
-            if (!pillar || !task) return;
-
-            const newTask = { id: Date.now(), pillar, task, member, status, comments: '', archived: false, featured: false };
-            activeDataset.push(newTask);
-            document.getElementById('add-task-desc').value = '';
-            syncState();
+            e.preventDefault(); const pillar = document.getElementById('add-pillar').value; const task = document.getElementById('add-task-desc').value.trim();
+            const member = document.getElementById('add-member').value; const status = document.getElementById('add-status').value; if (!pillar || !task) return;
+            activeDataset.push({ id: Date.now(), pillar, task, member, status, comments: '', archived: false, featured: false });
+            document.getElementById('add-task-desc').value = ''; syncState();
         });
-
-        document.getElementById('btn-samples').addEventListener('click', () => {
-            activeDataset = [...sampleDataset];
-            pillarsList = [...samplePillars];
-            syncState();
-        });
+        document.getElementById('btn-samples').addEventListener('click', () => { activeDataset = [...sampleDataset]; pillarsList = [...samplePillars]; syncState(); });
 
         document.getElementById('console-ledger-body').addEventListener('click', (e) => {
-            const btn = e.target.closest('button');
-            if (!btn) return;
-            const id = parseInt(btn.dataset.id);
-
+            const btn = e.target.closest('button'); if (!btn) return; const id = parseInt(btn.dataset.id);
             if (btn.classList.contains('btn-pin')) {
                 const task = activeDataset.find(t => t.id === id);
-                if (task) {
-                    activeDataset.forEach(t => { if (t.pillar === task.pillar) t.featured = (t.id === id); });
-                    syncState();
-                }
+                if (task) { activeDataset.forEach(t => { if (t.pillar === task.pillar) t.featured = (t.id === id); }); syncState(); }
             } else if (btn.classList.contains('btn-archive-row')) {
-                const task = activeDataset.find(t => t.id === id);
-                if (task) { task.archived = !task.archived; syncState(); }
+                const task = activeDataset.find(t => t.id === id); if (task) { task.archived = !task.archived; syncState(); }
             } else if (btn.classList.contains('btn-delete-row')) {
-                document.getElementById('delete-task-id-holder').value = id;
-                document.getElementById('delete-modal').classList.remove('hidden');
+                document.getElementById('delete-task-id-holder').value = id; document.getElementById('delete-modal').classList.remove('hidden');
             } else if (btn.classList.contains('btn-edit-row')) {
                 const task = activeDataset.find(t => t.id === id);
                 if (task) {
-                    document.getElementById('edit-task-id').value = id;
-                    document.getElementById('edit-pillar').value = task.pillar;
-                    document.getElementById('edit-member').value = task.member;
-                    document.getElementById('edit-task-desc').value = task.task;
-                    document.getElementById('edit-status').value = task.status;
-                    document.getElementById('edit-comment').value = task.comments || '';
+                    document.getElementById('edit-task-id').value = id; document.getElementById('edit-pillar').value = task.pillar;
+                    document.getElementById('edit-member').value = task.member; document.getElementById('edit-task-desc').value = task.task;
+                    document.getElementById('edit-status').value = task.status; document.getElementById('edit-comment').value = task.comments || '';
                     document.getElementById('edit-modal').classList.remove('hidden');
                 }
             }
         });
 
         document.getElementById('frm-edit-task').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const id = parseInt(document.getElementById('edit-task-id').value);
-            const task = activeDataset.find(t => t.id === id);
+            e.preventDefault(); const id = parseInt(document.getElementById('edit-task-id').value); const task = activeDataset.find(t => t.id === id);
             if (task) {
-                task.member = document.getElementById('edit-member').value;
-                task.task = document.getElementById('edit-task-desc').value;
-                task.status = document.getElementById('edit-status').value;
-                task.comments = document.getElementById('edit-comment').value;
-                document.getElementById('edit-modal').classList.add('hidden');
-                syncState();
+                task.member = document.getElementById('edit-member').value; task.task = document.getElementById('edit-task-desc').value;
+                task.status = document.getElementById('edit-status').value; task.comments = document.getElementById('edit-comment').value;
+                document.getElementById('edit-modal').classList.add('hidden'); syncState();
             }
         });
 
-        document.getElementById('btn-edit-close').addEventListener('click', () => document.getElementById('edit-modal').classList.add('hidden'));
         document.getElementById('btn-edit-cancel').addEventListener('click', () => document.getElementById('edit-modal').classList.add('hidden'));
         document.getElementById('btn-delete-cancel').addEventListener('click', () => document.getElementById('delete-modal').classList.add('hidden'));
         document.getElementById('btn-delete-confirm').addEventListener('click', () => {
             const id = parseInt(document.getElementById('delete-task-id-holder').value);
-            activeDataset = activeDataset.filter(t => t.id !== id);
-            document.getElementById('delete-modal').classList.add('hidden');
-            syncState();
+            activeDataset = activeDataset.filter(t => t.id !== id); document.getElementById('delete-modal').classList.add('hidden'); syncState();
         });
-
         document.getElementById('btn-wipe-trigger').addEventListener('click', () => document.getElementById('reset-modal').classList.remove('hidden'));
         document.getElementById('btn-reset-cancel').addEventListener('click', () => document.getElementById('reset-modal').classList.add('hidden'));
-        document.getElementById('btn-reset-confirm').addEventListener('click', () => {
-            activeDataset = []; pillarsList = [];
-            document.getElementById('reset-modal').classList.add('hidden');
-            syncState();
-        });
+        document.getElementById('btn-reset-confirm').addEventListener('click', () => { activeDataset = []; pillarsList = []; document.getElementById('reset-modal').classList.add('hidden'); syncState(); });
 
-        document.getElementById('btn-share-trigger').addEventListener('click', () => {
-            document.getElementById('share-link-input').value = window.location.href;
-            document.getElementById('share-modal').classList.remove('hidden');
-        });
-        document.getElementById('btn-share-close').addEventListener('click', () => {
-            document.getElementById('share-modal').classList.add('hidden');
-            document.getElementById('share-copied-toast').classList.add('hidden');
-        });
-        document.getElementById('btn-copy-action').addEventListener('click', () => {
-            const copyText = document.getElementById('share-link-input');
-            copyText.select(); copyText.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(copyText.value);
-            document.getElementById('share-copied-toast').classList.remove('hidden');
-        });
-        document.getElementById('btn-info-close').addEventListener('click', () => document.getElementById('info-modal').classList.add('hidden'));
+        document.getElementById('btn-share-trigger').addEventListener('click', () => { document.getElementById('share-link-input').value = window.location.href; document.getElementById('share-modal').classList.remove('hidden'); });
+        document.getElementById('btn-share-close').addEventListener('click', () => { document.getElementById('share-modal').classList.add('hidden'); });
+        document.getElementById('btn-copy-action').addEventListener('click', () => { const copyText = document.getElementById('share-link-input'); copyText.select(); navigator.clipboard.writeText(copyText.value); document.getElementById('share-copied-toast').classList.remove('hidden'); });
 
         initializeFirebaseAndSync();
     </script>
