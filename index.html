@@ -1,46 +1,41 @@
-async function initializeFirebaseAndSync() {
-            try {
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                db = getFirestore(app);
+HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mRNA Portfolio Operations Board</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
 
-                const credentials = await signInAnonymously(auth);
-                if (credentials.user) {
-                    // This is the correct Version 11 path reader
-                    const docRef = doc(db, 'pillars', 'dashboardState');
-                    
-                    // This creates the live real-time read pipeline
-                    onSnapshot(docRef, (docSnap) => {
-                        if (docSnap.exists()) {
-                            const cloudData = docSnap.data();
-                            activeDataset = cloudData.tasks || [];
-                            pillarsList = cloudData.pillars || [];
-                            selectedQuarter = cloudData.quarter || "Q3";
-                            selectedYear = cloudData.year || "2026";
-
-                            document.getElementById('select-quarter').value = selectedQuarter;
-                            document.getElementById('select-year').value = selectedYear;
-
-                            updateUIState();
-                            setSyncStatus(true, "Live Real-Time Syncing Active");
-                        } else {
-                            // If document doesn't exist, create it empty
-                            saveToCloud([], [], "Q3", "2026");
-                            setSyncStatus(true, "Live Real-Time Syncing Active");
-                        }
-                    }, (error) => {
-                        console.error("Real-time read pipeline failed:", error);
-                        loadFromLocalFallback();
-                    });
-                    isSyncedMode = true;
-                } else {
-                    loadFromLocalFallback();
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navyDark: '#080c16',     /* Deep Midnight Base */
+                        navyCard: '#111c30',     /* Rich Slate Card Panel */
+                        navyBorder: '#1e293b',   /* Strategic Structural Border */
+                        brandYellow: '#facc15',  /* Brand Accent Yellow */
+                        textWhite: '#ffffff',    /* High contrast text */
+                        textMuted: '#94a3b8',    /* Secondary slate gray */
+                        textLight: '#cbd5e1'     /* Highly readable body text */
+                    },
+                    fontFamily: {
+                        sans: ['Arial', 'Helvetica', 'sans-serif'],
+                    }
                 }
-            } catch (err) {
-                console.error("Firebase Connection Error:", err);
-                loadFromLocalFallback();
             }
-        }            width: 6px;
+        }
+    </script>
+    <style>
+        /* Smooth, premium transitions for presentations */
+        .slide-transition {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        /* Custom scrollbar to match dark premium styling */
+        ::-webkit-scrollbar {
+            width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
@@ -444,7 +439,7 @@ async function initializeFirebaseAndSync() {
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Constants and State Variables
+        // State Variables Context Array Configurations
         const samplePillars = ["1. RVFV", "6. PSDA Polymer", "7. LNP Development", "13. Analytics", "14. ELN & PM", "15. People", "18. Vaccine TT"];
         const sampleDataset = [
             { id: 1, pillar: "1. RVFV", member: "Nermine", milestone: "April", task: "Review EDA comments on RVFV file and draft response plan before deadline", status: "Overdue", comments: "Awaiting final analytical validation parameters.", archived: false, featured: true },
@@ -489,10 +484,8 @@ async function initializeFirebaseAndSync() {
 
                 const credentials = await signInAnonymously(auth);
                 if (credentials.user) {
-                    // Correct structural format matching your Firebase Console
                     const docRef = doc(db, 'pillars', 'dashboardState');
                     
-                    // Fixed v11 Snapshot listener logic providing the incoming Real-Time read channels
                     onSnapshot(docRef, (docSnap) => {
                         if (docSnap.exists()) {
                             const cloudData = docSnap.data();
@@ -579,7 +572,7 @@ async function initializeFirebaseAndSync() {
 
         function populatePillarDropdowns() {
             const dropSelect = document.getElementById('add-pillar');
-            dropSelect.innerHTML = '<option value="" disabled selected>Select Target Pillar</option>';
+            dropSelect.innerHTML = '<option value="" disabled navigator selected>Select Target Pillar</option>';
             if (pillarsList.length === 0) {
                 dropSelect.innerHTML += '<option value="" disabled>No custom pillars added yet</option>';
             } else {
@@ -587,6 +580,7 @@ async function initializeFirebaseAndSync() {
             }
         }
 
+        // Custom formatting logic maps
         function getStatusColor(status) {
             switch(status) {
                 case 'Overdue': return 'text-red-400 bg-red-950/30 border border-red-500/20';
@@ -695,19 +689,23 @@ async function initializeFirebaseAndSync() {
             lucide.createIcons();
         }
 
-        // Slide Controller Navigation Logic
+        // Carousel Slider Navigation 
         function goToSlide(slideNum) {
             for (let i = 1; i <= totalSlides; i++) {
                 const s = document.getElementById(`slide-${i}`);
-                s.classList.add('hidden', 'opacity-0', 'scale-95');
-                s.classList.remove('opacity-100', 'scale-100', 'z-10');
+                if(s) {
+                    s.classList.add('hidden', 'opacity-0', 'scale-95');
+                    s.classList.remove('opacity-100', 'scale-100', 'z-10');
+                }
             }
             const target = document.getElementById(`slide-${slideNum}`);
-            target.classList.remove('hidden');
-            setTimeout(() => {
-                target.classList.remove('opacity-0', 'scale-95');
-                target.classList.add('opacity-100', 'scale-100', 'z-10');
-            }, 50);
+            if(target) {
+                target.classList.remove('hidden');
+                setTimeout(() => {
+                    target.classList.remove('opacity-0', 'scale-95');
+                    target.classList.add('opacity-100', 'scale-100', 'z-10');
+                }, 50);
+            }
             currentSlide = slideNum;
             document.getElementById('btn-prev-slide').disabled = (currentSlide === 1);
             document.getElementById('btn-next-slide').disabled = (currentSlide === totalSlides);
@@ -717,6 +715,7 @@ async function initializeFirebaseAndSync() {
 
         function renderIndicators() {
             const container = document.getElementById('slide-indicators');
+            if(!container) return;
             container.innerHTML = '';
             for (let i = 1; i <= totalSlides; i++) {
                 const activeClass = i === currentSlide ? "bg-brandYellow" : "bg-navyBorder hover:bg-brandYellow/50";
@@ -724,7 +723,7 @@ async function initializeFirebaseAndSync() {
             }
         }
 
-        // DOM Bound Functional Handlers Configuration
+        // DOM Declarative Handoff Triggers Execution Setup
         document.getElementById('btn-prev-slide').addEventListener('click', () => { if (currentSlide > 1) goToSlide(currentSlide - 1); });
         document.getElementById('btn-next-slide').addEventListener('click', () => { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); });
         document.getElementById('slide-indicators').addEventListener('click', (e) => {
@@ -747,7 +746,7 @@ async function initializeFirebaseAndSync() {
             applyConsoleFilters();
         });
 
-        // Dropdown listeners
+        // Interactive Filtering Handlers
         document.getElementById('select-quarter').addEventListener('change', (e) => { selectedQuarter = e.target.value; syncState(); });
         document.getElementById('select-year').addEventListener('change', (e) => { selectedYear = e.target.value; syncState(); });
         document.getElementById('filter-member').addEventListener('change', applyConsoleFilters);
@@ -755,7 +754,7 @@ async function initializeFirebaseAndSync() {
         document.getElementById('toggle-hide-completed').addEventListener('change', (e) => { hideCompletedSetting = e.target.checked; applyConsoleFilters(); });
         document.getElementById('toggle-show-archived').addEventListener('change', (e) => { showArchivedSetting = e.target.checked; applyConsoleFilters(); });
 
-        // Add Pillar Logic
+        // Stream Pipeline Builders
         document.getElementById('frm-add-pillar').addEventListener('submit', (e) => {
             e.preventDefault();
             const input = document.getElementById('new-pillar-name');
@@ -767,7 +766,6 @@ async function initializeFirebaseAndSync() {
             }
         });
 
-        // Add Task Logic
         document.getElementById('frm-add-task').addEventListener('submit', (e) => {
             e.preventDefault();
             const pillar = document.getElementById('add-pillar').value;
@@ -782,14 +780,13 @@ async function initializeFirebaseAndSync() {
             syncState();
         });
 
-        // Sample Data Hydrator Button
         document.getElementById('btn-samples').addEventListener('click', () => {
             activeDataset = [...sampleDataset];
             pillarsList = [...samplePillars];
             syncState();
         });
 
-        // Interactive Matrix Core Listeners Table Delegations
+        // Grid Matrix Row Actions Delegation
         document.getElementById('console-ledger-body').addEventListener('click', (e) => {
             const btn = e.target.closest('button');
             if (!btn) return;
@@ -821,7 +818,7 @@ async function initializeFirebaseAndSync() {
             }
         });
 
-        // Edit Modal Form processing
+        // Edit Modal Frame persistence processing
         document.getElementById('frm-edit-task').addEventListener('submit', (e) => {
             e.preventDefault();
             const id = parseInt(document.getElementById('edit-task-id').value);
@@ -836,7 +833,7 @@ async function initializeFirebaseAndSync() {
             }
         });
 
-        // Utility Modal Event Handlers
+        // Global Dialog Modal Core Handlers
         document.getElementById('btn-edit-close').addEventListener('click', () => document.getElementById('edit-modal').classList.add('hidden'));
         document.getElementById('btn-edit-cancel').addEventListener('click', () => document.getElementById('edit-modal').classList.add('hidden'));
         document.getElementById('btn-delete-cancel').addEventListener('click', () => document.getElementById('delete-modal').classList.add('hidden'));
@@ -847,7 +844,6 @@ async function initializeFirebaseAndSync() {
             syncState();
         });
 
-        // Reset Template Actions
         document.getElementById('btn-wipe-trigger').addEventListener('click', () => document.getElementById('reset-modal').classList.remove('hidden'));
         document.getElementById('btn-reset-cancel').addEventListener('click', () => document.getElementById('reset-modal').classList.add('hidden'));
         document.getElementById('btn-reset-confirm').addEventListener('click', () => {
@@ -856,7 +852,6 @@ async function initializeFirebaseAndSync() {
             syncState();
         });
 
-        // Share Modals Setup
         document.getElementById('btn-share-trigger').addEventListener('click', () => {
             document.getElementById('share-link-input').value = window.location.href;
             document.getElementById('share-modal').classList.remove('hidden');
@@ -871,8 +866,9 @@ async function initializeFirebaseAndSync() {
             navigator.clipboard.writeText(copyText.value);
             document.getElementById('share-copied-toast').classList.remove('hidden');
         });
+        document.getElementById('btn-info-close').addEventListener('click', () => document.getElementById('info-modal').classList.add('hidden'));
 
-        // Initialize Core System Execution
+        // Initialize Native System Connection Execution Flow
         initializeFirebaseAndSync();
     </script>
 </body>
