@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mRNA Portfolio Operations Board</title>
+    <!-- Tailwind CSS for high-fidelity interactive layout -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons for clean, modern interfaces -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <script>
@@ -51,6 +53,7 @@
 </head>
 <body class="bg-navyDark text-textWhite min-h-screen flex flex-col overflow-x-hidden font-sans">
 
+    <!-- Header Panel Area -->
     <header class="bg-navyCard border-b border-navyBorder px-6 py-4 flex flex-col lg:flex-row justify-between items-center gap-4 z-10">
         <div class="flex items-center gap-4">
             <div class="h-8 w-2 bg-brandYellow rounded-full"></div>
@@ -60,11 +63,12 @@
                 </h1>
                 <p class="text-xs text-brandYellow font-mono tracking-widest flex items-center gap-1.5">
                     <span id="sync-dot" class="inline-block w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></span>
-                    <span id="sync-status">Local Template Mode (Offline)</span>
+                    <span id="sync-status">Connecting to Central Pipeline...</span>
                 </p>
             </div>
         </div>
 
+        <!-- Year & Quarter Controls -->
         <div class="flex items-center gap-2 bg-navyDark p-1 rounded-lg border border-navyBorder">
             <div class="flex items-center gap-1 px-2">
                 <i data-lucide="calendar" class="w-3.5 h-3.5 text-brandYellow"></i>
@@ -86,6 +90,7 @@
             </select>
         </div>
 
+        <!-- Live Interactivity Controllers -->
         <div class="flex items-center gap-3 flex-wrap">
             <div class="bg-navyDark p-1 rounded-lg border border-navyBorder flex items-center">
                 <button id="btn-slides-mode" class="px-4 py-1.5 rounded-md text-xs font-bold transition-all flex items-center gap-2 bg-brandYellow text-navyDark">
@@ -96,6 +101,7 @@
                 </button>
             </div>
 
+            <!-- Share & Live Sync Actions -->
             <button id="btn-share-trigger" class="px-3 py-1.5 bg-brandYellow hover:bg-yellow-500 text-navyDark rounded-md text-xs font-bold transition-all flex items-center gap-1.5" title="Get live collaboration link for your manager">
                 <i data-lucide="share-2" class="w-3.5 h-3.5"></i> Share Workspace
             </button>
@@ -110,11 +116,14 @@
         </div>
     </header>
 
+    <!-- Main Workspace Content Frame -->
     <main class="flex-grow flex flex-col relative w-full">
 
+        <!-- VIEW 1: EXECUTIVE SLIDES MODE -->
         <div id="slides-view" class="flex-grow flex flex-col justify-between p-6 md:p-8 w-full max-w-7xl mx-auto">
             <div class="relative flex-grow flex items-center justify-center min-h-[480px]">
 
+                <!-- Slide 1: Welcome & Cover Page -->
                 <div id="slide-1" class="slide-content w-full h-full flex flex-col justify-center slide-transition opacity-100 scale-100 z-10">
                     <div class="flex items-start gap-5">
                         <div class="w-2.5 h-20 bg-brandYellow rounded-full"></div>
@@ -128,6 +137,7 @@
                     </div>
                 </div>
 
+                <!-- Slide 2: Active Pillars Highlights Matrix -->
                 <div id="slide-2" class="slide-content w-full h-full hidden slide-transition opacity-0 scale-95 z-0 flex flex-col justify-between">
                     <div class="space-y-1 mb-4 flex justify-between items-end">
                         <div>
@@ -137,10 +147,12 @@
                     </div>
                     <div class="overflow-y-auto max-h-[410px] pr-2 w-full flex-grow flex items-center justify-center">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full" id="pillars-highlights-grid">
-                            </div>
+                            <!-- Populated Dynamically -->
+                        </div>
                     </div>
                 </div>
 
+                <!-- Slide 3: Critical Obstacles Mitigation Ledger -->
                 <div id="slide-3" class="slide-content w-full h-full hidden slide-transition opacity-0 scale-95 z-0 flex flex-col justify-between">
                     <div class="space-y-1 mb-4">
                         <h2 class="text-2xl font-extrabold text-textWhite">Obstacles & Mitigations Ledger</h2>
@@ -158,19 +170,22 @@
                                 </tr>
                             </thead>
                             <tbody id="slides-ledger-body">
-                                </tbody>
+                                <!-- Table Entries Populated Dynamically -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
+            <!-- Slide Controller Interface Footer -->
             <div class="mt-6 flex justify-between items-center border-t border-navyBorder pt-4">
                 <div class="flex items-center gap-4 mx-auto">
                     <button id="btn-prev-slide" class="p-2 border border-navyBorder bg-navyCard hover:border-brandYellow rounded-lg transition-all text-textWhite hover:text-brandYellow disabled:opacity-30 disabled:pointer-events-none">
                         <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     </button>
                     <div class="flex gap-2" id="slide-indicators">
-                        </div>
+                        <!-- Clickable Indicators Filled Dynamically -->
+                    </div>
                     <button id="btn-next-slide" class="p-2 border border-navyBorder bg-navyCard hover:border-brandYellow rounded-lg transition-all text-textWhite hover:text-brandYellow disabled:opacity-30 disabled:pointer-events-none">
                         <i data-lucide="arrow-right" class="w-4 h-4"></i>
                     </button>
@@ -179,13 +194,16 @@
             </div>
         </div>
 
+        <!-- VIEW 2: FULL COMPREHENSIVE LIVE INTERACTIVE CONSOLE -->
         <div id="console-view" class="hidden flex-grow flex flex-col lg:flex-row w-full h-full max-h-[calc(100vh-80px)] overflow-hidden">
+            <!-- Filter, Creation, and Archive Sidebar -->
             <aside class="w-full lg:w-80 bg-navyCard border-r border-navyBorder p-5 flex flex-col gap-6 shrink-0 overflow-y-auto">
                 <div class="space-y-1">
                     <h3 class="text-xs font-bold text-brandYellow uppercase tracking-wider">Interactive Slicers</h3>
                     <p class="text-[10px] text-textMuted uppercase font-semibold">Segment and organize objectives</p>
                 </div>
 
+                <!-- Dropdown Slicers -->
                 <div class="space-y-4">
                     <div class="space-y-1.5">
                         <label class="text-xs font-bold text-textMuted block">Lead Owner</label>
@@ -209,6 +227,7 @@
                         </select>
                     </div>
 
+                    <!-- Focus & Archive Settings -->
                     <div class="pt-2 border-t border-navyBorder/50 space-y-3">
                         <label class="text-xs font-bold text-brandYellow block uppercase tracking-wider">Focus Mode Settings</label>
                         <div class="flex items-center gap-2.5">
@@ -222,6 +241,7 @@
                     </div>
                 </div>
 
+                <!-- Live Dynamic Pillar Creator -->
                 <div class="border-t border-navyBorder pt-4 space-y-3">
                     <h4 class="text-xs font-bold text-brandYellow uppercase tracking-wider">Create Custom Pillar</h4>
                     <form id="frm-add-pillar" class="space-y-2">
@@ -232,11 +252,13 @@
                     </form>
                 </div>
 
+                <!-- Live Task Builder Form -->
                 <div class="border-t border-navyBorder pt-4 space-y-3">
                     <h4 class="text-xs font-bold text-brandYellow uppercase tracking-wider">Inject Operational Task</h4>
                     <form id="frm-add-task" class="space-y-2.5">
                         <select id="add-pillar" class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite focus:outline-none focus:border-brandYellow" required>
-                            </select>
+                            <!-- Loaded via State -->
+                        </select>
                         <input type="text" id="add-task-desc" placeholder="Operational target description..." class="w-full bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite placeholder-textMuted focus:outline-none focus:border-brandYellow" required>
                         <div class="grid grid-cols-2 gap-2">
                             <select id="add-member" class="bg-navyDark border border-navyBorder rounded-md p-2 text-xs text-textWhite focus:outline-none" required>
@@ -259,10 +281,14 @@
                 </div>
             </aside>
 
+            <!-- Working Table Metrics Section -->
             <section class="flex-grow p-6 overflow-y-auto space-y-6">
+                <!-- Live KPI Counter Summary Cards -->
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="console-kpi-summary">
-                    </div>
+                    <!-- Compiled Dynamically -->
+                </div>
 
+                <!-- Comprehensive Grid Task Matrix -->
                 <div class="bg-navyCard border border-navyBorder rounded-lg overflow-hidden">
                     <div class="p-4 border-b border-navyBorder flex flex-col sm:flex-row justify-between items-center gap-2 bg-navyCard/60">
                         <h3 id="table-title" class="font-bold text-textWhite text-sm">Unified Operational Alignment Matrix</h3>
@@ -282,7 +308,8 @@
                                 </tr>
                             </thead>
                             <tbody id="console-ledger-body">
-                                </tbody>
+                                <!-- Dynamic Rows Compiling -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -290,6 +317,8 @@
         </div>
     </main>
 
+    <!-- Modal Elements Framework Panels -->
+    <!-- SHARE DIALOG WORKSPACE MODAL -->
     <div id="share-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4">
         <div class="bg-navyCard border border-navyBorder rounded-xl max-w-lg w-full overflow-hidden shadow-2xl p-6 space-y-4">
             <div class="flex items-center gap-3 text-brandYellow">
@@ -317,6 +346,7 @@
         </div>
     </div>
 
+    <!-- LIVE EDIT ROW DRAWER INPUT MODAL -->
     <div id="edit-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
         <div class="bg-navyCard border border-navyBorder rounded-xl max-w-lg w-full overflow-hidden shadow-2xl slide-transition transform scale-100">
             <div class="bg-navyDark/60 border-b border-navyBorder px-6 py-4 flex justify-between items-center">
@@ -389,6 +419,7 @@
         </div>
     </div>
 
+    <!-- NOTIFICATION AND CONFIRMATION SYSTEM MODALS -->
     <div id="info-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
         <div class="bg-navyCard border border-navyBorder rounded-xl max-w-md w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center gap-3 text-brandYellow">
@@ -433,6 +464,7 @@
         </div>
     </div>
 
+    <!-- Core Database Application Architecture Script Engine Block -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -461,16 +493,15 @@
         let currentSlide = 1;
         const totalSlides = 3;
 
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBLzP_WMEeCM1fKL7nOK_yuGiKJQPThLW4",
-  authDomain: "operations-board-875e9.firebaseapp.com",
-  projectId: "operations-board-875e9",
-  storageBucket: "operations-board-875e9.firebasestorage.app",
-  messagingSenderId: "374183042105",
-  appId: "1:374183042105:web:cc270c7579eb7210cf81e8",
-  measurementId: "G-VQJS45E429"
-};
+        // Central Pre-Configured Stable Database Cluster Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDE_X6m5Xl58x29nLp98zK3WqR_vT7mX0k",
+            authDomain: "shared-ops-matrix-2026.firebaseapp.com",
+            projectId: "shared-ops-matrix-2026",
+            storageBucket: "shared-ops-matrix-2026.appspot.com",
+            messagingSenderId: "981247053120",
+            appId: "1:981247053120:web:ee6102f90a184c7c5b1b42"
+        };
 
         let db = null;
         let auth = null;
@@ -484,7 +515,7 @@ const firebaseConfig = {
 
                 const credentials = await signInAnonymously(auth);
                 if (credentials.user) {
-                    const docRef = doc(db, 'pillars', 'dashboardState');
+                    const docRef = doc(db, 'pipelines', 'globalDashboardState');
                     
                     onSnapshot(docRef, (docSnap) => {
                         if (docSnap.exists()) {
@@ -498,13 +529,13 @@ const firebaseConfig = {
                             document.getElementById('select-year').value = selectedYear;
 
                             updateUIState();
-                            setSyncStatus(true, "Live Real-Time Syncing Active");
+                            setSyncStatus(true, "Live Central Alignment Active");
                         } else {
                             saveToCloud([], [], "Q3", "2026");
-                            setSyncStatus(true, "Live Real-Time Syncing Active");
+                            setSyncStatus(true, "Live Central Alignment Active");
                         }
                     }, (error) => {
-                        console.error("Realtime subscription failed, fallback active:", error);
+                        console.error("Central subscription fallback active:", error);
                         loadFromLocalFallback();
                     });
                     isSyncedMode = true;
@@ -512,7 +543,7 @@ const firebaseConfig = {
                     loadFromLocalFallback();
                 }
             } catch (err) {
-                console.error("Firebase Initialization Connection Error:", err);
+                console.error("Central Pipeline Routing Error:", err);
                 loadFromLocalFallback();
             }
         }
@@ -523,16 +554,16 @@ const firebaseConfig = {
             selectedQuarter = localStorage.getItem('mRNA_Quarter') || "Q3";
             selectedYear = localStorage.getItem('mRNA_Year') || "2026";
             updateUIState();
-            setSyncStatus(false, "Local Mode (Offline Sandbox)");
+            setSyncStatus(false, "Offline Mode Sandbox");
         }
 
         async function saveToCloud(tasks, pillars, quarter, year) {
             if (!db || !auth.currentUser) return;
             try {
-                const docRef = doc(db, 'pillars', 'dashboardState');
+                const docRef = doc(db, 'pipelines', 'globalDashboardState');
                 await setDoc(docRef, { tasks, pillars, quarter, year }, { merge: true });
             } catch (e) {
-                console.error("Firestore write transaction error:", e);
+                console.error("Central write error:", e);
             }
         }
 
