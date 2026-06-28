@@ -461,17 +461,6 @@
         let currentSlide = 1;
         const totalSlides = 3;
 
-        async function saveToCloud(tasks, pillars, quarter, year) {
-            if (!db || !auth.currentUser) return;
-            try {
-                const docRef = doc(db, 'pillars', 'dashboardState');
-                await setDoc(docRef, { tasks, pillars, quarter, year }, { merge: true });
-                console.log("Data successfully broadcasted to Cloud Firestore!");
-            } catch (e) {
-                console.error("Firestore write transaction error:", e);
-            }
-        }
-
         const firebaseConfig = {
             apiKey: "AIzaSyBLzP_WMEeCM1fKL7nOK_yuGiKJQPThLW4",
             authDomain: "operations-board-875e9.firebaseapp.com",
@@ -590,7 +579,6 @@
             }
         }
 
-        // Custom formatting logic maps
         function getStatusColor(status) {
             switch(status) {
                 case 'Overdue': return 'text-red-400 bg-red-950/30 border border-red-500/20';
@@ -699,7 +687,6 @@
             lucide.createIcons();
         }
 
-        // Carousel Slider Navigation 
         function goToSlide(slideNum) {
             for (let i = 1; i <= totalSlides; i++) {
                 const s = document.getElementById(`slide-${i}`);
@@ -733,7 +720,6 @@
             }
         }
 
-        // DOM Declarative Handoff Triggers Execution Setup
         document.getElementById('btn-prev-slide').addEventListener('click', () => { if (currentSlide > 1) goToSlide(currentSlide - 1); });
         document.getElementById('btn-next-slide').addEventListener('click', () => { if (currentSlide < totalSlides) goToSlide(currentSlide + 1); });
         document.getElementById('slide-indicators').addEventListener('click', (e) => {
@@ -756,7 +742,6 @@
             applyConsoleFilters();
         });
 
-        // Interactive Filtering Handlers
         document.getElementById('select-quarter').addEventListener('change', (e) => { selectedQuarter = e.target.value; syncState(); });
         document.getElementById('select-year').addEventListener('change', (e) => { selectedYear = e.target.value; syncState(); });
         document.getElementById('filter-member').addEventListener('change', applyConsoleFilters);
@@ -764,7 +749,6 @@
         document.getElementById('toggle-hide-completed').addEventListener('change', (e) => { hideCompletedSetting = e.target.checked; applyConsoleFilters(); });
         document.getElementById('toggle-show-archived').addEventListener('change', (e) => { showArchivedSetting = e.target.checked; applyConsoleFilters(); });
 
-        // Stream Pipeline Builders
         document.getElementById('frm-add-pillar').addEventListener('submit', (e) => {
             e.preventDefault();
             const input = document.getElementById('new-pillar-name');
@@ -796,7 +780,6 @@
             syncState();
         });
 
-        // Grid Matrix Row Actions Delegation
         document.getElementById('console-ledger-body').addEventListener('click', (e) => {
             const btn = e.target.closest('button');
             if (!btn) return;
@@ -828,7 +811,6 @@
             }
         });
 
-        // Edit Modal Frame persistence processing
         document.getElementById('frm-edit-task').addEventListener('submit', (e) => {
             e.preventDefault();
             const id = parseInt(document.getElementById('edit-task-id').value);
@@ -843,7 +825,6 @@
             }
         });
 
-        // Global Dialog Modal Core Handlers
         document.getElementById('btn-edit-close').addEventListener('click', () => document.getElementById('edit-modal').classList.add('hidden'));
         document.getElementById('btn-edit-cancel').addEventListener('click', () => document.getElementById('edit-modal').classList.add('hidden'));
         document.getElementById('btn-delete-cancel').addEventListener('click', () => document.getElementById('delete-modal').classList.add('hidden'));
@@ -878,7 +859,6 @@
         });
         document.getElementById('btn-info-close').addEventListener('click', () => document.getElementById('info-modal').classList.add('hidden'));
 
-        // Initialize Native System Connection Execution Flow
         initializeFirebaseAndSync();
     </script>
 </body>
